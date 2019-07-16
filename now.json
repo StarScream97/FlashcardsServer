@@ -1,8 +1,0 @@
-{
-    "name": "Flashcards API",
-    "version": 2,
-    "builds": [{ "src": "**/server*.js", "use": "@now/node" }],
-    "env": {
-      "MONGODB_URI": "@my-mongodb-uri"
-    }
-  }
