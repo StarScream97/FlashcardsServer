@@ -4,7 +4,7 @@ const mongoose=require('mongoose');
 const bodyParser = require('body-parser');
 const cors=require('cors');
 
-const port= 3000 || process.env.PORT;
+const port= 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -14,7 +14,7 @@ const UserController=require('./Controllers/UserController');
 const CardController=require('./Controllers/CardController');
 const CategoryController=require('./Controllers/CategoryController');
 const DeckController=require('./Controllers/DeckController')
-app.listen(port,()=>{
+app.listen(process.env.PORT || port,()=>{
     console.log('server running on 3000');
 })
 
