@@ -32,6 +32,10 @@ const cardSchema=new mongoose.Schema({
     private:{
         type:Boolean,
         default:false
+    },
+    createdDate:{
+        type:Date,
+        default:Date.now()
     }
 })
 

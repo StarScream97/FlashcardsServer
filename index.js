@@ -26,10 +26,10 @@ app.use('/category',CategoryController);
 app.use('/deck',DeckController);
 
 
-
+mongoose.set('useFindAndModify', false);
 
 // "mongodb+srv://StarScream97:@Inspiron7@flashcards-c5wfz.mongodb.net/test?retryWrites=true&w=majority"
-mongoose.connect("mongodb+srv://StarScream97:@Inspiron7@flashcards-c5wfz.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true },()=>{
+mongoose.connect("mongodb+srv://StarScream97:@Inspiron7@flashcards-c5wfz.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true, useFindAndModify: false },()=>{
     // mongoose.connect('mongodb://localhost:27017/csitforum',{ useNewUrlParser: true },()=>{
         console.log('Mongodb Connected Successfully');
     })
