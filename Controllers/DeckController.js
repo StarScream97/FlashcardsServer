@@ -8,7 +8,7 @@ const CategoryModel=require('../Models/CategoryModel')
 const DeckModel=require('../Models/DeckModel');
 
 
-// Create a deck; Personal(without category) or public(in a certain category)
+// Create a deck
 Router.post('/',async(req,res)=>{
     const {name,description,categoryId,userId,private}=req.body;
 
@@ -95,6 +95,86 @@ Router.post('/addcard',async(req,res)=>{
     
 })
 
+// Toggle Deck Privacy
+Router.post('/toggleprivacy',async(req,res)=>{
+    const {userId,deckId}=req.body;
+    try {
+        const user=await UserModel.findById(userId);
+        if(user.decks.indexOf(deckId)<0){
+            return res.send({
+                error:true,
+                errorLog:"You do not have the permission to edit other's deck!"
+            })
+        };
+        let deck=await DeckModel.findById(deckId);
+        deck.private=!deck.private;
+      
+        const result=await deck.save();
+        // const updatedResult= await result.populate('categoryId').execPopulate();
+        // console.log(updatedResult);
+        return res.send(await result.populate('categoryId').execPopulate());
+    } catch (error) {
+        return res.send({
+            error:true,
+            errorLog:error
+        })
+    }
+})
+
+
+// Fetch All Decks
+Router.get('/',async(req,res)=>{
+    try {
+        const results=await DeckModel.find({private:false}).populate('categoryId');
+        return res.send(results);
+    } catch (error) {
+        return res.send({
+            error:true,
+            errorLog:error
+        })
+    }
+})
+
+
+// Save a Deck
+Router.post('/save',async(req,res)=>{
+    const {userId,deckId}=req.body;
+    try {
+        const user=await UserModel.findById(userId);
+        if(user.savedDecks.indexOf(deckId)>=0){
+            return res.send({
+                error:true,
+                errorLog:'Deck already saved!'
+            })
+        }
+
+        user.savedDecks.push(deckId);
+        await user.save();
+        return res.send('Deck Successfully Saved');
+
+    } catch (error) {
+        return res.send({
+            error:true,
+            errorLog:error
+        })
+    }
+})
+
+// Remove Saved Deck
+Router.delete('/deletesaved/:userId/:deckId',async(req,res)=>{
+    const {userId,deckId}=req.params;
+    try {
+        const user=await UserModel.findById(userId);
+        user.savedDecks.splice(user.savedDecks.indexOf(deckId),1);
+        await user.save();
+        return res.send('Successfully deleted from saved deck!');
+    } catch (error) {
+        return res.send({
+            error:true,
+            errorLog:error
+        })
+    }
+})
 
 
 

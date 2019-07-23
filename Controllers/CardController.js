@@ -136,6 +136,21 @@ Router.post('/like', async (req, res) => {
 
 
 
+// Remove Saved Card
+Router.delete('/deletesaved/:userId/:cardId',async(req,res)=>{
+    const {userId,cardId}=req.params;
+    try {
+        const user=await UserModel.findById(userId);
+        user.savedCards.splice(user.savedCards.indexOf(cardId),1);
+        await user.save();
+        return res.send('Successfully deleted from saved cards!');
+    } catch (error) {
+        return res.send({
+            error:true,
+            errorLog:error
+        })
+    }
+})
 
 
 
